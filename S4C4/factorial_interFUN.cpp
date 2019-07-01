@@ -2,7 +2,7 @@
 using namespace std;
 
 
-int fact(int);
+unsigned long long int fact(int);
 
 
 
@@ -14,7 +14,7 @@ int main(){
 	return 0;
 }
 
-int fact(int n){
+unsigned long long int fact(int n){
 
 	if(n>1){
 		return fact(n-1)*n;
