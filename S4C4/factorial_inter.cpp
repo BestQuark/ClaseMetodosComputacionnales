@@ -2,23 +2,17 @@
 using namespace std;
 
 
-int fact(int);
-
-
 
 int main(){
 	cout << "Factorial de : ";
 	int num = 0;
 	cin >> num;
-	cout << "El valor es: " << fact(num) <<endl;
+	int rta = num;
+	for(int i = num-1; i>0; i = i-1 ){
+		rta = rta*i;
+	}
+	cout << "El valor es: " << rta <<endl;
 	return 0;
 }
 
-int fact(int n){
 
-	if(n>1){
-		return fact(n-1)*n;
-	}else if (n=1){
-		return 1;
-	}
-}
