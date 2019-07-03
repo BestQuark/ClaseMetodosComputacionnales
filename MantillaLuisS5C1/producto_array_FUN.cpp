@@ -20,8 +20,7 @@ int main () {
 	cout << "El producto de elementos es:" << endl;
 
 	for(int i=0;i<5;i++){
-			cout << *productoEl << endl;
-			productoEl++;
+			cout << *(productoEl+i) << endl;	
 	}
 	
 	cout << "El producto punto es:" << endl;
@@ -31,24 +30,22 @@ int main () {
 }
 
 
-int prod[5];
-int *prodEle(int *p1, int *p2){
 
-	
+int *prodEle(int* p1, int* p2){
+	static int prod[5];
+	int *p;
+	p = prod;
+
 	for(int i=0; i<5; i++){
-		prod[i]= *p1 * *p2;
-		p1++;
-		p2++;
+		prod[i]= *(p1+i) * *(p2+i);
 	}
-
-	return prod;
+	return p;
 }
 
-int prodPunt(int *p1){
+int prodPunt(int *pp1){
 	int rta = 0;
 		for(int i=0; i<5; i++){
-			rta = rta + *p1;
-			p1++;		
+			rta = rta + *(pp1+i);		
 		}
 
 	return rta;

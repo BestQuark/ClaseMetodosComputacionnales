@@ -1,9 +1,10 @@
 #include <iostream>
 #include<cmath>
+#include <fstream>
 using namespace std;
 
 
-int *derivada(float*,float);
+float *derivada(float*,float,int);
 
 float funcion(float);
 
@@ -32,7 +33,19 @@ int main(){
 		arreg[i]= inic + i*paso;
 	}
 	
+	float *l = derivada(arreg, paso, num);
+
+		
+
+	ofstream outfile;
+	outfile.open("valores.dat");
+
+
+	for(int i =0; i<num;i++){
+		outfile << *(l+i) <<" " << funcion(arreg[i]) <<" " <<arreg[i]<< endl;
+	}
 	
+	outfile.close();
 	
 
 	return 0;
@@ -43,12 +56,14 @@ float funcion(float p){
 	return cos(p);
 }
 
-int *derivada(float *arreg, float h){
-	
+float *derivada(float *arre, float h,int n){
+
+	static float *derivs = new float[n];
+
 	for(int i =0; i<n; i++){
-		deriv[i]= 	(funcion(*arreg + h/2)- funcion(*arreg-h/2))/h;
-		arreg++;		
+		*(derivs+i)= (funcion(*(arre+i) + h/2)- funcion(*(arre+i)-h/2))/h;
+		
 	}
 
-	return deriv;		
+	return derivs;		
 }
