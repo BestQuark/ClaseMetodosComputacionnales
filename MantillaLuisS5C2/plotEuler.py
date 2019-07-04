@@ -3,7 +3,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-datos = np.genfromtxt("aplot.dat")
+datos = np.genfromtxt("plotEuler.dat")
 
 
 

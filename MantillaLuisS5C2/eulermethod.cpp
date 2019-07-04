@@ -40,7 +40,7 @@ int main () {
 	
 
 	ofstream outfile;
-	outfile.open("aplot.dat");
+	outfile.open("plotEuler.dat");
 
 
 	for(int i =0; i<num;i++){
