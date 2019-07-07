@@ -4,7 +4,7 @@
 using namespace std;
 
 
-float *aumentodepos(float, float, float );
+float *aumentodepos(float , float , float , float , float );
 
 	float tinicial = 0;
 	float tfinal = 0;
@@ -47,21 +47,26 @@ int main () {
 	float velocidades[num];
 	float posiciones[num];
 	float tiempos[num];
+	
+	float l = -constantek/masa;
 
 	posiciones[0] = posinic;
 	velocidades[0] = velinic;
 	tiempos[0] = tinicial;
+
+	tiempos[1] = tinicial + paso;
+	posiciones[1] = posinic + paso*velinic;
+	velocidades[1] = velinic + paso*l*posinic;
 	
-
-
+	
 	ofstream outfile;
 	outfile.open("posicion.dat");
 
 
-	for(int i =0; i<num;i++){
+	for(int i =1; i<num;i++){
 		outfile << tiempos[i] <<" " << posiciones[i]<< endl;
 		
-		float *p = aumentodepos(velocidades[i], posiciones[i], paso);
+		float *p = aumentodepos(velocidades[i-1],velocidades[i], posiciones[i-1],posiciones[i], paso);
 		velocidades[i+1]= *p;
 		posiciones[i+1] = *(p+1);
 		tiempos[i+1] = tiempos[i] + paso;
@@ -77,45 +82,19 @@ int main () {
 
 
 
-float *aumentodepos(float vel, float pos, float h){
+float *aumentodepos(float velantes, float veldespues, float posantes, float posdespues, float h){
 	
 		float l = -constantek/masa;
 		
 		static float cos[2];
 		float *p = cos;
 
-		float k1x = h*vel;
-		float k1v = h*pos*l;
 
-		float posmitad1 = pos + k1x/2;
-		float velmitad1 = vel + k1v/2;
-
-		float k2x = h*velmitad1;
-		float k2v =  h*posmitad1*l;
-
-		float posmitad2 = pos + k2x/2;
-		float velmitad2 = vel + k2v/2;
-	
-		float k3x = h*velmitad2;
-		float k3v =  h*posmitad2*l;	
-
-		float k4x = h*(vel + k3v);
-		float k4v =  h*l*(pos + k3x);	
-
-		float promx =  (k1x+2*k2x+ 2*k3x +k4x)/6;
-		float promv =  (k1v+2*k2v+ 2*k3v+ k4v)/6;
-
-		cos[0]= vel + promv;
-		cos [1] = pos+ promx;
+		cos[0]= velantes + 2*h*l*posdespues;
+		cos [1] = posantes+ 2*h*veldespues;
 
 		return p;
 		
 }
-
-
-
-
-
-
 
 
