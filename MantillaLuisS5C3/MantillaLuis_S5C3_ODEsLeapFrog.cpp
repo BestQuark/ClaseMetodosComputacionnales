@@ -64,7 +64,7 @@ int main () {
 
 
 	for(int i =1; i<num;i++){
-		outfile << tiempos[i] <<" " << posiciones[i]<< endl;
+		outfile << tiempos[i] <<" " << posiciones[i]<<" " << velocidades[i]<< endl;
 		
 		float *p = aumentodepos(velocidades[i-1],velocidades[i], posiciones[i-1],posiciones[i], paso);
 		velocidades[i+1]= *p;
