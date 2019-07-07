@@ -59,7 +59,7 @@ int main () {
 
 
 	for(int i =0; i<num;i++){
-		outfile << tiempos[i] <<" " << posiciones[i]<< endl;
+		outfile << tiempos[i] <<" " << posiciones[i]<<" "<< velocidades[i]<< endl;
 		
 		float *p = aumentodepos(velocidades[i], posiciones[i], paso);
 		velocidades[i+1]= *p;
@@ -67,6 +67,8 @@ int main () {
 		tiempos[i+1] = tiempos[i] + paso;
 				
 	}
+	//imprimimos el ultimo dato que omite el for.
+	outfile << tiempos[num] <<" " << posiciones[num]<<" "<< velocidades[num]<< endl;
 	
 	outfile.close();
 

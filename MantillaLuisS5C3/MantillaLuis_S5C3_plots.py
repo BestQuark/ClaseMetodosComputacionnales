@@ -9,6 +9,7 @@ datos = np.genfromtxt("posicion.dat")
 
 x = datos[:,0]
 y = datos[:,1]
+v = datos[:,2]
 
 
 
