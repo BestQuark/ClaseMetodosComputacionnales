@@ -19,6 +19,12 @@ z2 = datos[1200:1400,3]
 z3 = datos[1800:2000,3]
 z4 = datos[2200:2400,3]
 
+l0 = datos[:200,4]
+l1 = datos[600:800,4]
+l2 = datos[1200:1400,4]
+l3 = datos[1800:2000,4]
+l4 = datos[2200:2400,4]
+
 
 
 
@@ -56,5 +62,22 @@ plt.xlabel("posicion [m]")
 plt.ylabel("posicion [m]")
 plt.legend()
 plt.savefig("Caso2.pdf")
+
+
+
+
+plt.figure()
+plt.title("Solucion ecuacion usando C++")
+plt.plot(x,l0,c = 'g', label = "posicion inicial")
+plt.plot(x,l1,c = 'r', label = "posicion 1")
+plt.plot(x,l2,c = 'b', label = "posicion 2")
+plt.plot(x,l3,c = 'black', label = "posicion 3")
+plt.plot(x,l4,c = 'c', label = "posicion final")
+
+
+plt.xlabel("posicion [m]")
+plt.ylabel("posicion [m]")
+plt.legend()
+plt.savefig("Caso3.pdf")
 
 

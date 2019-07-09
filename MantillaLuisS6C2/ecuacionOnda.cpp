@@ -33,11 +33,19 @@ int main () {
 	float posciLibre[num];
 	float posciNuevLibre[num];
 
+	float inicCaso3[num];
+	float posciViejaCaso3[num];
+	float posciCaso3[num];
+	float posciNuevCaso3[num];
+
 
 	//condiciones iniciales:
 
 	for(int i =0; i<num; i++){
-		
+			inicCaso3[i]=0;
+			posciViejaCaso3[i]=0;
+			posciCaso3[i]=0;
+
 		if( i*dx <= longitud/2  ){
 			posciVieja[i] = amplitudCentro*2*i*dx/longitud; 
 			posci[i]= amplitudCentro*2*i*dx/longitud;
@@ -63,35 +71,41 @@ int main () {
 	ofstream outfile;
 	outfile.open("posiciones.dat");
 	for(int i = 0; i<veces; i++){
-		for(int i = 0; i<num; i++){
-			if(i==0){
+		for(int j = 0; j<num; j++){
+			if(j==0){
 
-				posciNuev[i]=0;
-				posciNuevLibre[i] = 0; 
+				posciNuev[j]=0;
+				posciNuevLibre[j] = 0; 
+				posciNuevCaso3[j]=0;
 			}
-			else if(i==num-1){
-				posciNuev[i]=0;
-				posciNuevLibre[i] = kte*(posciLibre[i-1]-posciLibre[i]) + 2*posciLibre[i] - posciViejaLibre[i];
+			else if(j==num-1){
+				posciNuev[j]=0;
+				posciNuevLibre[j] = kte*(posciLibre[j-1]-posciLibre[j]) + 2*posciLibre[j] - posciViejaLibre[j];
+				posciNuevCaso3[j] = amplitudCentro*sin(3.0*c*i*dt*3.14159/longitud);
 			}
 			else{
-				posciNuev[i] = aproximacion(posci[i], posciVieja[i],posci[i+1], posci[i-1],kte);
-				posciNuevLibre[i] = aproximacion(posciLibre[i], posciViejaLibre[i],posciLibre[i+1], posciLibre[i-1],kte);
+				posciNuev[j] = aproximacion(posci[j], posciVieja[j],posci[j+1], posci[j-1],kte);
+				posciNuevLibre[j] = aproximacion(posciLibre[j], posciViejaLibre[j],posciLibre[j+1], posciLibre[j-1],kte);
+				posciNuevCaso3[j] = aproximacion(posciCaso3[j], posciViejaCaso3[j],posciCaso3[j+1], posciCaso3[j-1],kte);
 					
 			}
 		}
 
-		for(int i = 0; i<num; i++){
-			posciVieja[i] = posci[i];
-			posci[i]= posciNuev[i];
+		for(int j = 0; j<num; j++){
+			posciVieja[j] = posci[j];
+			posci[j]= posciNuev[j];
 
-			posciViejaLibre[i] = posciLibre[i];
-			posciLibre[i]= posciNuevLibre[i];
+			posciViejaLibre[j] = posciLibre[j];
+			posciLibre[j]= posciNuevLibre[j];
+
+			posciViejaCaso3[j] = posciCaso3[j];
+			posciCaso3[j]= posciNuevCaso3[j];
 
 		}
 
 		if(i%1000==0 )
 			for(int i =0; i<num;i++){
-				outfile << i*dx <<" " <<inic[i] <<" " << posciNuev[i] << " "<< posciNuevLibre[i] <<endl;
+				outfile << i*dx <<" " <<inic[i] <<" " << posciNuev[i] << " "<< posciNuevLibre[i] <<" " <<posciNuevCaso3[i]<<endl;
 			}
 		
 		
