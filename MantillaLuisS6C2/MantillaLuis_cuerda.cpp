@@ -16,7 +16,7 @@ int main () {
 	
 	float tiempoFinal = 0.1;
 
-	float dt2 = 0.25*dx*dx/(c*c);
+	float dt2 = 0.02*dx*dx/(c*c);
 
 	float kte = dt2*c*c/(dx*dx); 
 
