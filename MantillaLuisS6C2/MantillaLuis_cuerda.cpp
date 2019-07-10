@@ -103,7 +103,7 @@ int main () {
 
 		}
 
-		if(i%1000==0 )
+		if(i%100==0 )
 			for(int i =0; i<num;i++){
 				outfile << i*dx <<" " <<inic[i] <<" " << posciNuev[i] << " "<< posciNuevLibre[i] <<" " <<posciNuevCaso3[i]<<endl;
 			}
