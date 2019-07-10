@@ -9,21 +9,26 @@ float aprox2d(float , float , float , float , float , float , float );
 float gaussian(float , float , float );
 
 int main () {
-	int num = 200;
 	
 	//variables membrana
 	
+
+
 	float sigma = 0.1;
+	int grilla = 50;
 
-	float inicMembrana[num][num];
-	float posciMembrana[num][num];
-	float posciMembranaVieja[num][num];
-	float posciMembranaNuev[num][num];
 
-	float dy = 0.005;
+	float inicMembrana[grilla][grilla];
+	float posciMembrana[grilla][grilla];
+	float posciMembranaVieja[grilla][grilla];
+	float posciMembranaNuev[grilla][grilla];
+
+	
+	float dy = 0.02;
 	float amplitudGaussiana = 0.01;
 
 	//variables cuerda
+	int num = 200;
 
 	float longitud = 1.0;
 	float dx = 0.005;
@@ -32,14 +37,22 @@ int main () {
 	
 	float tiempoFinal = 0.1;
 
+
+
+
 	float dt2 = 0.02*dx*dx/(c*c);
+	float dt2t = 0.005*dy*dy/(c*c);
+
+
 
 	float kte = dt2*c*c/(dx*dx); 
+	float kte2 = dt2t*c*c/(dy*dy); 
 
 	float dt = sqrt(dt2);
+	float dtn = sqrt(dt2t);
 
 	int veces = int(tiempoFinal/dt);
-
+	int veces2 = int(tiempoFinal/dtn);
 
 
 	float inic[num];
@@ -93,17 +106,17 @@ int main () {
 
 
 	//condiciones iniciales tambor:
-	for(int i=0; i<num; i++){
-		for(int j =0; j<num; j++){
+	for(int i=0; i<grilla; i++){
+		for(int j =0; j<grilla; j++){
 			if(i==0 || j ==0 || i==num-1 || j==num-1){
 				inicMembrana[i][j] = 0;
 				posciMembrana[i][j]=0;
 				posciMembranaVieja[i][j]=0;
 			}else{
 	
-				inicMembrana[i][j] = amplitudGaussiana*gaussian(sigma, i*dx-longitud/2, j*dy-(longitud/2));
-				posciMembrana[i][j]=amplitudGaussiana*gaussian(sigma, i*dx-longitud/2, j*dy-(longitud/2));
-				posciMembranaVieja[i][j]=amplitudGaussiana*gaussian(sigma, i*dx-longitud/2, j*dy-(longitud/2));
+				inicMembrana[i][j] = amplitudGaussiana*gaussian(sigma, i*dy-longitud/2, j*dy-(longitud/2));
+				posciMembrana[i][j]=amplitudGaussiana*gaussian(sigma, i*dy-longitud/2, j*dy-(longitud/2));
+				posciMembranaVieja[i][j]=amplitudGaussiana*gaussian(sigma, i*dy-longitud/2, j*dy-(longitud/2));
 			}
 		}
 	}
@@ -149,31 +162,32 @@ int main () {
 
 	outfile.close();
 
+//evol temp del tambor
+
 	outfile.open("posicionesTambor.dat");
 	
-
-	for(int l=0; l<veces;l++){
-		for(int i=0; i<num; i++){
-			for(int j =0; j<num; j++){
+	for(int l=0; l<veces2;l++){
+		for(int i=0; i<grilla; i++){
+			for(int j =0; j<grilla; j++){
 				if(i==0 || j ==0 || i==num-1 || j==num-1){
 					posciMembranaNuev[i][j]=0;
 				}else{
-					posciMembranaNuev[i][j] = aprox2d(posciMembrana[i][j], posciMembranaVieja[i][j], posciMembrana[i+1][j],posciMembrana[i-1][j],posciMembrana[i][j+1],posciMembrana[i][j-1],kte);
+					posciMembranaNuev[i][j] = aprox2d(posciMembrana[i][j], posciMembranaVieja[i][j], posciMembrana[i+1][j],posciMembrana[i-1][j],posciMembrana[i][j+1],posciMembrana[i][j-1],kte2);
 				}
 			}
 		}
 
-		for(int i=0; i<num; i++){
-			for(int j =0; j<num; j++){
+		for(int i=0; i<grilla; i++){
+			for(int j =0; j<grilla; j++){
 				posciMembranaVieja[i][j] = posciMembrana[i][j];
 				posciMembrana[i][j] = posciMembranaNuev[i][j]; 
 			}
 		}
 
-		if(l%1000==0){
-			for(int i=0; i<num; i++){
-				for(int j =0; j<num; j++){
-					outfile << i*dx <<" "<< j*dy <<" " <<inicMembrana[i][j] <<" " << posciMembranaNuev[i][j] <<endl;
+		if(l%30==0){
+			for(int i=0; i<grilla; i++){
+				for(int j =0; j<grilla; j++){
+					outfile << i*dy <<" "<< j*dy <<" " <<inicMembrana[i][j] <<" " << posciMembranaNuev[i][j] <<endl;
 				}
 			}
 		}

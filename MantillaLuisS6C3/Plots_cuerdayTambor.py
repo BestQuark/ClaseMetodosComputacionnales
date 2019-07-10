@@ -4,31 +4,68 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.cm as cm
 
 
 datos = np.genfromtxt("posiciones.dat")
 
-datosMembrana = np.genfromtxt("posicionesTambor.dat")
+datosMembrana = np.genfromtxt("posicionesTambor.dat", delimiter=" ")
 
 def update_line(num, data, line, caso):
     line.set_data(x,data[200*num:200*(num+1),caso+1])
     return line,
 
+
 x = datos[:200,0]
 
 
-posxMemb = datos[:40000,0]
-posyMemb = datos[:40000,1]
-poszMemb = datos[:40000,2]
+posxMemb = datosMembrana[:2500,0]
+posyMemb = datosMembrana[:2500,1]
+poszMemb1 = datosMembrana[:2500,2]
 
 
 figt = plt.figure()
-ax = figt.add_subplot(111,projection='3d')
-ax.set_xlim3d(0, 1)
-ax.set_ylim3d(0,1)
+axt = figt.add_subplot(111,projection='3d')
+axt.set_xlim3d(0, 1)
+axt.set_ylim3d(0,1)
+axt.set_zlim3d(-0.01,0.01)
 
-ax.scatter(posxMemb,posyMemb,poszMemb, c = "r")
-plt.savefig("tamborCondiInic.png")
+
+t = np.arange(2500)
+axt.scatter(posxMemb,posyMemb,poszMemb1,c = t, cmap = 'viridis')
+axt.set_xlabel("x [m]")
+axt.set_ylabel("y [m]")
+axt.set_zlabel("amplitud [m]")
+plt.savefig("tamborInicial.png")
+
+#------------------------------------------------
+
+for i in range(20):
+	poszMemb2 = datosMembrana[2500*i:2500*(i+1),3]
+	figt = plt.figure()
+	axt = figt.add_subplot(111,projection='3d')
+	axt.set_xlim3d(0, 1)
+	axt.set_ylim3d(0,1)
+	axt.set_zlim3d(-0.01,0.01)
+
+
+	t = np.arange(2500)
+	axt.scatter(posxMemb,posyMemb,poszMemb2,c = t, cmap = 'viridis')
+	axt.set_xlabel("x [m]")
+	axt.set_ylabel("y [m]")
+	axt.set_zlabel("amplitud [m]")
+	plt.savefig("tambor"+ str(i)+".png")
+
+
+
+
+
+
+
+
+
+
+
 
 
 plt.figure()

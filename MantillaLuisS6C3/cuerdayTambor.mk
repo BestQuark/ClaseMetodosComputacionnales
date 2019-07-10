@@ -1,4 +1,4 @@
-all: Caso1.pdf Caso2.pdf Caso3.pdf Caso1.gif Caso2.gif Caso3.gif tamborCondiInic.png
+all: Caso1.pdf Caso2.pdf Caso3.pdf Caso1.gif Caso2.gif Caso3.gif tambor0.png
 
 Caso1.pdf: Plots_cuerdayTambor.py posiciones.dat
 	python3 Plots_cuerdayTambor.py
@@ -13,7 +13,11 @@ posiciones.dat: MantillaLuis_cuerdayTambor.cpp
 	g++ MantillaLuis_cuerdayTambor.cpp
 	./a.out
 
-tamborCondiInic.png: Plots_cuerdayTambor.py posiciones.dat
+posicionesTambor.dat: MantillaLuis_cuerdayTambor.cpp
+	g++ MantillaLuis_cuerdayTambor.cpp
+	./a.out
+
+tambor0.png: Plots_cuerdayTambor.py posicionesTambor.dat
 	python3 Plots_cuerdayTambor.py
 
 
