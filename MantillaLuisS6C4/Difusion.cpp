@@ -1,0 +1,94 @@
+#include <iostream>
+#include<cmath>
+#include <fstream>
+#include <math.h> 
+using namespace std;
+
+float evol(float , float , float , float , float , float );
+
+
+int main(){
+
+	float nu = 0.0001;
+	float lado = 1;
+	float dx = 0.01;
+	int grilla = int(lado/dx);
+	
+	float temp[grilla][grilla];
+	float tempNueva[grilla][grilla];
+
+	float tempPer[grilla][grilla];
+	float tempNuevaPer[grilla][grilla];
+	
+	float dt = 0.1*dx*dx/nu;
+
+	float cte = dt*nu/(dx*dx);
+	
+	float tiempoTotal = 2500;
+	int veces = int(2500/dt);
+
+	float tempPromedio[veces];
+	float tempPromedioPer[veces];
+
+
+	//condiciones iniciales
+	for(int i =0; i<grilla; i++){
+		for(int j=0; j<grilla; j++){
+			
+			if(i*dx<=0.8 && i*dx>=0.6 && j*dx<=0.6 && j*dx>=0.4){
+				temp[i][j] = 100;
+				tempPer[i][j]=100;
+			}
+			else{
+				temp[i][j]= 50;
+				tempPer[i][j]=50;			
+			}
+		}
+	}
+
+	ofstream outfile;
+	outfile.open("temps.dat");
+	
+	//evolucion temporal
+	
+	for(int l=0; l<veces;l++){
+		float tempMean = 0;
+	//	float tempMeanPer = 0;
+		if(l==0 || l*dt==100 || l==veces-1){
+			for(int i =0; i<grilla; i++){
+				for(int j=0; j<grilla; j++){
+					outfile << i*dx << " "<<j*dx <<" "<<temp[i][j]<< endl;	
+				}
+			}
+		}
+	
+		for(int i =0; i<grilla; i++){
+			for(int j=0; j<grilla; j++){
+			//	tempMeanPer = tempMeanPer + tempPer[i][j];
+			
+				if(i==0 || j==0 || i==grilla-1 || j==grilla-1){
+					
+					tempNueva[i][j] = 50;
+				//	tempNuevaPer[i][j]= evol(temp[i][j], temp[i+1][j], temp[i-1][j], temp[i][j+1], temp[i][j-1], cte);	
+				}
+				else{
+					tempNueva[i][j]= evol(temp[i][j], temp[i+1][j], temp[i-1][j], temp[i][j+1], temp[i][j-1], cte);
+				}				
+			}
+		}
+		for(int i =0; i<grilla; i++){
+			for(int j=0; j<grilla; j++){
+				tempMean = tempMean + temp[i][j];
+				temp[i][j] = tempNueva[i][j];
+			}
+		}
+		tempPromedio[l]=tempMean/(grilla*grilla);
+	}
+	outfile.close();
+	
+	return 0;
+}
+
+float evol(float temprn, float tempxp, float tempxn, float tempyp, float tempyn, float k){
+	return k*(tempxp+tempxn+tempyp+tempyn-4*temprn)+temprn;
+}
