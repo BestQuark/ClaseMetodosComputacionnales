@@ -37,6 +37,7 @@ int main(){
 	float tempPromedio[veces];
 	float tempPromedioPer[veces];
 	float tempPromedioAb[veces];
+	float tempPromedioBon[veces];
 
 
 	//condiciones iniciales
@@ -67,6 +68,7 @@ int main(){
 		float tempMean = 0;
 		float tempMeanPer = 0;
 		float tempMeanAb =0;
+		float tempMeanBon =0;
 		if(l==0 || l*dt==100 || l==veces-1){
 			for(int i =0; i<grilla; i++){
 				for(int j=0; j<grilla; j++){
@@ -89,10 +91,10 @@ int main(){
 					int jnN = j-1;
 					int jpN = j+1;
 
-					if(i==0){inNew = grilla-1; inN=i;}
-					if(i==grilla-1){ipNew = 0; ipN=i;}
-					if(j==0){jnNew = grilla-1; jnN =j;}
-					if(j==grilla-1){jpNew = 0; jpN = j;}
+					if(i==0){inNew = grilla-1; inN=i+1;}
+					if(i==grilla-1){ipNew = 0; ipN=i-1;}
+					if(j==0){jnNew = grilla-1; jnN =j+1;}
+					if(j==grilla-1){jpNew = 0; jpN = j-1;}
 
 					tempNueva[i][j] = 50;
 					tempNuevaBon[i][j] = evol(tempBon[i][j], tempBon[ipNew][j], tempBon[inNew][j], tempBon[i][jpNew], tempBon[i][jnNew], cte);
@@ -117,6 +119,7 @@ int main(){
 				tempMean = tempMean + temp[i][j];
 				tempMeanPer = tempMeanPer + tempPer[i][j];
 				tempMeanAb = tempMeanAb + tempAb[i][j];
+				tempMeanBon = tempMeanBon + tempBon[i][j]; 
 				temp[i][j] = tempNueva[i][j];
 				tempPer[i][j] = tempNuevaPer[i][j];
 				tempAb[i][j] = tempNuevaAb[i][j];
@@ -126,13 +129,14 @@ int main(){
 		tempPromedio[l]=tempMean/(grilla*grilla);
 		tempPromedioPer[l] = tempMeanPer/(grilla*grilla);
 		tempPromedioAb[l]=tempMeanAb/(grilla*grilla);
+		tempPromedioBon[l]=tempMeanBon/(grilla*grilla);
 	}
 	outfile.close();
 
 	outfile.open("temperaturaMean.dat");
 	
 	for(int l=0; l<veces;l++){
-		outfile<< tempPromedio[l] <<" " <<tempPromedioPer[l] <<" "<<tempPromedioAb[l]<< endl;
+		outfile<< tempPromedio[l] <<" " <<tempPromedioPer[l] <<" "<<tempPromedioAb[l]<<" "<< tempPromedioBon[l] << endl;
 	}
 
 	outfile.close();

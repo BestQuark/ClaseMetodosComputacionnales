@@ -168,12 +168,14 @@ plt.savefig("temp2500sBono.png")
 pro1 = promeds[:,0]
 pro2 = promeds[:,1]
 pro3 = promeds[:,2]
+pro4 = promeds[:,3]
 
 
 plt.figure()
 plt.plot(pro1, c='r', label ='Fijas')
 plt.plot(pro2, c='g', marker ='o', label ='Periodicas')
 plt.plot(pro3, c='b', label ='Abiertas')
+plt.plot(pro4, c= 'black', label ="Bono")
 plt.title("Temperatura promedio")
 plt.xlabel("tiempo*10 [s]")
 plt.ylabel("Temperatura [C]")
