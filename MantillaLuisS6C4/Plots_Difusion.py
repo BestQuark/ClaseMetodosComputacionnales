@@ -13,19 +13,21 @@ posy = datos[:10000,1]
 temp = datos[:10000,2]
 tempPer = datos[:10000,3]
 tempAb =datos[:10000,4]
-
+tempB =datos[:10000,5]
 
 posx1 = datos[10000:20000,0]
 posy1 = datos[10000:20000,1]
 temp1 = datos[10000:20000,2]
 temp1Per = datos[10000:20000,3]
 temp1Ab =  datos[10000:20000,4]
+temp1B =  datos[10000:20000,5]
 
 posx2 = datos[20000:30000,0]
 posy2 = datos[20000:30000,1]
 temp2 = datos[20000:30000,2]
 temp2Per = datos[20000:30000,3]
 temp2Ab = datos[20000:30000,4]
+temp2B = datos[20000:30000,5]
 ##########################################
 figt = plt.figure()
 axt = figt.add_subplot(111,projection='3d')
@@ -129,7 +131,39 @@ axt2a.set_ylabel("y [m]")
 axt2a.set_zlabel("Temperatura")
 plt.savefig("temp2500sAbierto.png")
 ######################################################
+figtb = plt.figure()
+axtb = figtb.add_subplot(111,projection='3d')
 
+
+axtb.plot_trisurf(posx,posy,tempB, cmap = 'plasma')
+axtb.set_xlabel("x [m]")
+axtb.set_ylabel("y [m]")
+axtb.set_zlabel("Temperatura")
+plt.savefig("temp0sBono.png")
+
+
+
+figt1b = plt.figure()
+axt1b = figt1b.add_subplot(111,projection='3d')
+
+
+axt1b.plot_trisurf(posx1,posy1,temp1B,cmap = 'plasma')
+axt1b.set_xlabel("x [m]")
+axt1b.set_ylabel("y [m]")
+axt1b.set_zlabel("Temperatura")
+plt.savefig("temp100sBono.png")
+
+
+figt2b = plt.figure()
+axt2b = figt2b.add_subplot(111,projection='3d')
+
+
+axt2b.plot_trisurf(posx2,posy2,temp2B, cmap = 'plasma')
+axt2b.set_xlabel("x [m]")
+axt2b.set_ylabel("y [m]")
+axt2b.set_zlabel("Temperatura")
+plt.savefig("temp2500sBono.png")
+#############################################
 
 pro1 = promeds[:,0]
 pro2 = promeds[:,1]
