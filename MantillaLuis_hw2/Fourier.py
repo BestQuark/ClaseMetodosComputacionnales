@@ -5,6 +5,10 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft, fftfreq
 
+#Definimos la funcion sigmoid para suavizar el hibrido 
+def sig(x):
+	return 1/(1+ np.exp(-15*x))
+
 #Almacenamos los datos de las imagenes en arreglos con imread
 imCara1 = plt.imread("cara_02_grisesMF.png")
 imCara2 = plt.imread("cara_03_grisesMF.png")
@@ -33,8 +37,10 @@ plt.savefig("TransformadaAmbasCaras.png")
 
 #Filtramos ambas imagenes y graficamos la mezcla de ambas
 
-filtro = np.where(np.abs(transCara1.real)<20, transCara1, transCara2)
-
+pasaAltas = transCara1*sig(-(np.abs(transCara1.real) - 24))
+pasaBajas = transCara2*sig(np.abs(transCara2.real)-16)
+filtro = pasaAltas+pasaBajas
+# np.where(np.abs(transCara1.real)<25, transCara1, 0)
 
 plt.figure()
 plt.title("Cara Hibrida")
