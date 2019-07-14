@@ -19,12 +19,13 @@ transCara1Shift = np.fft.fftshift(transCara1)
 transCara2Shift = np.fft.fftshift(transCara2)
 
 plt.figure()
-plt.title("Transformada de Fourier")
 
 plt.subplot(1,2,1)
+plt.title("Cara Seria")
 plt.imshow(transCara1Shift.real, vmax = 100, vmin = -100)
 
 plt.subplot(1,2,2)
+plt.title("Cara Riendo")
 plt.imshow(transCara2Shift.real, vmax = 100, vmin = -100)
 
 plt.savefig("TransformadaAmbasCaras.png")
@@ -36,6 +37,7 @@ filtro = np.where(np.abs(transCara1.real)<20, transCara1, transCara2)
 
 
 plt.figure()
+plt.title("Cara Hibrida")
 plt.imshow((np.fft.fftshift(filtro)).real, vmax = 100, vmin = -100)
 plt.savefig("TransformadaHibrida.png")
 
