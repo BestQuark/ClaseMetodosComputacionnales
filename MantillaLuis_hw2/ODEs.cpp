@@ -14,7 +14,7 @@ float *metodoLeapFrog(float , float , float , float , float , float , float , fl
 //definimos las variables globales (usamos unidades de UA, Masas Solares y yrs)
 
 float MasaSol = 1;
-double MasaTierra = 0.000003003;
+float MasaTierra = 3.003; //falta *10^-6
 float ConstanteGravit = 39.478;
 
 float orbita = 2*3.14159;
@@ -88,7 +88,7 @@ int main () {
 		
 		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
-		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<endl;
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<" " << dt1*i << endl;
 	}
 
 	outfile.close();
@@ -107,8 +107,7 @@ int main () {
 
 		float momento = distXRK*velocYRK - distYRK*velocXRK;
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
-
-		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<endl;
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<" " << dt1*i << endl;
 	}
 
 	outfile.close();
@@ -132,8 +131,7 @@ int main () {
 
 		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
-
-		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<endl;
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<" " << dt1*i << endl;
 
 	}
 
@@ -182,7 +180,7 @@ int main () {
 
 		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
-		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<endl;
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<" " << dt2*i << endl;
 	}
 
 	outfile.close();
@@ -200,10 +198,8 @@ int main () {
 		velocYRK=*(rk+3);
 
 		float momento = distXRK*velocYRK - distYRK*velocXRK;
-
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
-
-		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<endl;
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<" " << dt2*i << endl;
 	}
 
 	outfile.close();
@@ -226,10 +222,8 @@ int main () {
 		velocYLeap=*(lp+3);
 
 		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
-
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
-
-		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<endl;
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<" " << dt2*i << endl;
 
 	}
 
@@ -277,7 +271,7 @@ int main () {
 
 		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
-		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<endl;
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<" " << dt3*i << endl;
 	}
 
 	outfile.close();
@@ -294,10 +288,8 @@ int main () {
 		velocYRK=*(rk+3);
 
 		float momento = distXRK*velocYRK - distYRK*velocXRK;
-
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
-
-		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<endl;
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<" " << dt3*i << endl;
 	}
 
 	outfile.close();
@@ -320,10 +312,8 @@ int main () {
 		velocYLeap=*(lp+3);
 
 		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
-
 		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
-
-		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<endl;
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<" " << dt3*i << endl;
 
 	}
 
