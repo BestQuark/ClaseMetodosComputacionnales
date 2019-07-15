@@ -14,11 +14,23 @@ float *metodoLeapFrog(float , float , float , float , float , float , float , fl
 //definimos las variables globales (usamos unidades de UA, Masas Solares y yrs)
 
 float MasaSol = 1;
+double MasaTierra = 0.000003003;
 float ConstanteGravit = 39.478;
 
 float orbita = 2*3.14159;
-int pasos = 100000;
-float dt = orbita/pasos;
+
+
+int pasos1 = 10000;
+float dt1 = orbita/pasos1;
+
+int pasos2 = 1000;
+float dt2 = orbita/pasos2;
+
+int pasos3 = 500;
+float dt3 = orbita/pasos3;
+
+
+
 float numeroVueltas = 20;
 
 //condiciones iniciales
@@ -29,6 +41,8 @@ float vyi = 0.606;
 
 
 int main () {
+
+//Evolucion temporal del sistema PRIMER dt :
 
 //condiciones iniciales para cada metodo
 	
@@ -53,30 +67,58 @@ int main () {
 	float velocXLeapB=vxi;
 	float velocYLeapB=vyi;
 
-	float distXLeap=xi + dt*vxi;
-	float distYLeap=yi + dt*vyi;
-	float velocXLeap=vxi + dt*leapCte*xi;
-	float velocYLeap=vyi + dt*leapCte*yi;
+	float distXLeap=xi + dt1*vxi;
+	float distYLeap=yi + dt1*vyi;
+	float velocXLeap=vxi + dt1*leapCte*xi;
+	float velocYLeap=vyi + dt1*leapCte*yi;
 
-	//Evolucion temporal del sistema 
+	//Metodo de Euler
 	ofstream outfile;
-	outfile.open("posiciones.dat");
 
-	for(int i=1; i<pasos;i++){
+	outfile.open("metodoEuler1.dat");
 
-		float *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt);
-		float *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt);
-		float *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt);
+	for(int i=0; i<pasos1*numeroVueltas;i++){
+
+		float *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt1);
 
 		distXEuler=*euler;
 		distYEuler=*(euler+1);
 		velocXEuler=*(euler+2);
 		velocYEuler=*(euler+3);
+		
+		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<endl;
+	}
 
+	outfile.close();
+
+
+
+	//Metodo de Rungekutta 4th order
+	outfile.open("metodoRungeKutta1.dat");
+
+	for(int i=0; i<pasos1*numeroVueltas;i++){
+		float *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt1);
 		distXRK=*rk;
 		distYRK=*(rk+1);
 		velocXRK=*(rk+2);
 		velocYRK=*(rk+3);
+
+		float momento = distXRK*velocYRK - distYRK*velocXRK;
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
+
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<endl;
+	}
+
+	outfile.close();
+	
+	//Metodo de LeapFrog
+	outfile.open("metodoLeapFrog1.dat");
+
+	for(int i=0; i<pasos1*numeroVueltas;i++){
+
+		float *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt1);
 
 		distXLeapB=distXLeap;
 		distYLeapB=distYLeap;
@@ -88,15 +130,206 @@ int main () {
 		velocXLeap=*(lp+2);
 		velocYLeap=*(lp+3);
 
-		outfile << distXEuler << " " << distYEuler<<" " << distXRK<< " " << distYRK<<" " << distXLeap<< " " << distYLeap<< endl;
+		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
 
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<endl;
 
 	}
 
+	outfile.close();
 
+
+//Evolucion temporal del sistema SEGUNDO dt :
+
+//condiciones iniciales para cada metodo
+	
+	//Euler
+	distXEuler=xi;
+	distYEuler=yi;
+	velocXEuler=vxi;
+	velocYEuler=vyi;
+
+	//RungeKutta 4th Order
+	distXRK=xi;
+	distYRK=yi;
+	velocXRK=vxi;
+	velocYRK=vyi;
+
+	//LeapFrog
+
+	distXLeapB=xi;
+	distYLeapB=yi;
+	velocXLeapB=vxi;
+	velocYLeapB=vyi;
+
+	distXLeap=xi + dt2*vxi;
+	distYLeap=yi + dt2*vyi;
+	velocXLeap=vxi + dt2*leapCte*xi;
+	velocYLeap=vyi + dt2*leapCte*yi;
+	//Metodo de Euler
+
+	outfile.open("metodoEuler2.dat");
+
+	for(int i=0; i<pasos2*numeroVueltas;i++){
+
+		float *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt2);
+
+		distXEuler=*euler;
+		distYEuler=*(euler+1);
+		velocXEuler=*(euler+2);
+		velocYEuler=*(euler+3);
+
+		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<endl;
+	}
+
+	outfile.close();
+
+
+
+	//Metodo de Rungekutta 4th order
+	outfile.open("metodoRungeKutta2.dat");
+
+	for(int i=0; i<pasos2*numeroVueltas;i++){
+		float *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt2);
+		distXRK=*rk;
+		distYRK=*(rk+1);
+		velocXRK=*(rk+2);
+		velocYRK=*(rk+3);
+
+		float momento = distXRK*velocYRK - distYRK*velocXRK;
+
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
+
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<endl;
+	}
 
 	outfile.close();
 	
+	//Metodo de LeapFrog
+	outfile.open("metodoLeapFrog2.dat");
+
+	for(int i=0; i<pasos2*numeroVueltas;i++){
+
+		float *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt2);
+
+		distXLeapB=distXLeap;
+		distYLeapB=distYLeap;
+		velocXLeapB=velocXLeap;
+		velocYLeapB=velocYLeap;
+
+		distXLeap=*lp;
+		distYLeap=*(lp+1);
+		velocXLeap=*(lp+2);
+		velocYLeap=*(lp+3);
+
+		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
+
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
+
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<endl;
+
+	}
+
+	outfile.close();
+
+//Evolucion temporal del sistema TERCER dt :
+
+//condiciones iniciales para cada metodo
+	
+	//Euler
+	distXEuler=xi;
+	distYEuler=yi;
+	velocXEuler=vxi;
+	velocYEuler=vyi;
+
+	//RungeKutta 4th Order
+	distXRK=xi;
+	distYRK=yi;
+	velocXRK=vxi;
+	velocYRK=vyi;
+
+	//LeapFrog
+
+	distXLeapB=xi;
+	distYLeapB=yi;
+	velocXLeapB=vxi;
+	velocYLeapB=vyi;
+
+	distXLeap=xi + dt3*vxi;
+	distYLeap=yi + dt3*vyi;
+	velocXLeap=vxi + dt3*leapCte*xi;
+	velocYLeap=vyi + dt3*leapCte*yi;
+	//Metodo de Euler
+
+	outfile.open("metodoEuler3.dat");
+
+	for(int i=0; i<pasos3*numeroVueltas;i++){
+
+		float *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt3);
+
+		distXEuler=*euler;
+		distYEuler=*(euler+1);
+		velocXEuler=*(euler+2);
+		velocYEuler=*(euler+3);
+
+		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<endl;
+	}
+
+	outfile.close();
+
+
+	//Metodo de Rungekutta 4th order
+	outfile.open("metodoRungeKutta3.dat");
+
+	for(int i=0; i<pasos3*numeroVueltas;i++){
+		float *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt3);
+		distXRK=*rk;
+		distYRK=*(rk+1);
+		velocXRK=*(rk+2);
+		velocYRK=*(rk+3);
+
+		float momento = distXRK*velocYRK - distYRK*velocXRK;
+
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
+
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<endl;
+	}
+
+	outfile.close();
+	
+	//Metodo de LeapFrog
+	outfile.open("metodoLeapFrog3.dat");
+
+	for(int i=0; i<pasos3*numeroVueltas;i++){
+
+		float *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt3);
+
+		distXLeapB=distXLeap;
+		distYLeapB=distYLeap;
+		velocXLeapB=velocXLeap;
+		velocYLeapB=velocYLeap;
+
+		distXLeap=*lp;
+		distYLeap=*(lp+1);
+		velocXLeap=*(lp+2);
+		velocYLeap=*(lp+3);
+
+		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
+
+		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
+
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<endl;
+
+	}
+
+	outfile.close();
+
+
 	
 
 	return 0;
