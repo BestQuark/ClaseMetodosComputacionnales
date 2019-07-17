@@ -37,9 +37,9 @@ plt.savefig("TransformadaAmbasCaras.png")
 
 #Filtramos ambas imagenes y graficamos la mezcla de ambas
 
-#Multiplico por 1.7 las frecuencias altas pues se ven muy tenues estos razgos al juntar ambas imagenes
+#cambiamos un poco los pesos para que la suma de ambas se vea mejor
 pasaAltas = 1.7*transCara1*sig(-(np.abs(transCara1) - 24))
-pasaBajas = transCara2*sig(np.abs(transCara2)-16)
+pasaBajas = 0.9*transCara2*sig(np.abs(transCara2)-16)
 filtro = pasaAltas +pasaBajas
 
 #Podriamos usar el siguiente codigo como filtro pero viene mejor suavizarlo y tomar el corte en distintos puntos las frecuencias especificadas en http://cvcl.mit.edu/publications/OlivaTorralb_Hybrid_Siggraph06.pdf
@@ -79,7 +79,7 @@ plt.imshow(-caraHibrida.real, cmap = 'Greys')
 plt.savefig("CaraHibrida.png")
 
 #explicacion del warning por usar la exponencial
-print("Este warning sale ya que uso una exponencial para el filtro y se estan calculando valores de la exponencial muy altos, pero para nuestros fines, la funcion sigmond del filtro toma valores de 0 exactamente cuando llega al overflow")
+print("Este warning sale ya que uso una exponencial para el filtro y se estan calculando valores de la exponencial muy altos, pero para nuestros fines, la funcion sigmond del filtro toma valores de exactamente 0 cuando llega al overflow")
 
 
 
