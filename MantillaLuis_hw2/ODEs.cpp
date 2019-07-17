@@ -6,28 +6,28 @@ using namespace std;
 
 //definimos las funciones que usaremos en el main
 
-float *metodoEuler(float , float , float , float , float );
-float *metodoRungeKutta4(float , float , float , float , float );
-float *metodoLeapFrog(float , float , float , float , float , float , float , float , float );
+double *metodoEuler(double , double , double , double , double );
+double *metodoRungeKutta4(double , double , double , double , double );
+double *metodoLeapFrog(double , double , double , double , double , double , double , double , double );
 
 
 //definimos las variables globales (usamos unidades de UA, Masas Solares y yrs)
 
-float MasaSol = 1;
-float MasaTierra = 3.003; //falta *10^-6
-float ConstanteGravit = 39.478;
+double MasaSol = 1;
+double MasaTierra = 0.000003003; 
+double ConstanteGravit = 39.478;
 
-float orbita = 2*3.14159;
+double orbita = 2*3.14159;
 
 
 int pasos1 = 10000;
-float dt1 = orbita/pasos1;
+double dt1 = orbita/pasos1;
 
 int pasos2 = 1000;
-float dt2 = orbita/pasos2;
+double dt2 = orbita/pasos2;
 
 int pasos3 = 500;
-float dt3 = orbita/pasos3;
+double dt3 = orbita/pasos3;
 
 
 int numeroVueltas1 =int(20/dt1);
@@ -36,10 +36,10 @@ int numeroVueltas3 =int(20/dt3);
 
 
 //condiciones iniciales
-float xi = 0.1163;
-float yi = 0.9772;
-float vxi = -6.35;
-float vyi = 0.606;
+double xi = 0.1163;
+double yi = 0.9772;
+double vxi = -6.35;
+double vyi = 0.606;
 
 
 int main () {
@@ -49,30 +49,30 @@ int main () {
 //condiciones iniciales para cada metodo
 	
 	//Euler
-	float distXEuler=xi;
-	float distYEuler=yi;
-	float velocXEuler=vxi;
-	float velocYEuler=vyi;
+	double distXEuler=xi;
+	double distYEuler=yi;
+	double velocXEuler=vxi;
+	double velocYEuler=vyi;
 
 	//RungeKutta 4th Order
-	float distXRK=xi;
-	float distYRK=yi;
-	float velocXRK=vxi;
-	float velocYRK=vyi;
+	double distXRK=xi;
+	double distYRK=yi;
+	double velocXRK=vxi;
+	double velocYRK=vyi;
 
 	//LeapFrog
 
-	float leapCte = -MasaSol*ConstanteGravit/pow(sqrt(xi*xi + yi*yi),3);
+	double leapCte = -MasaSol*ConstanteGravit/pow(sqrt(xi*xi + yi*yi),3);
 
-	float distXLeapB=xi;
-	float distYLeapB=yi;
-	float velocXLeapB=vxi;
-	float velocYLeapB=vyi;
+	double distXLeapB=xi;
+	double distYLeapB=yi;
+	double velocXLeapB=vxi;
+	double velocYLeapB=vyi;
 
-	float distXLeap=xi + dt1*vxi;
-	float distYLeap=yi + dt1*vyi;
-	float velocXLeap=vxi + dt1*leapCte*xi;
-	float velocYLeap=vyi + dt1*leapCte*yi;
+	double distXLeap=xi + dt1*vxi;
+	double distYLeap=yi + dt1*vyi;
+	double velocXLeap=vxi + dt1*leapCte*xi;
+	double velocYLeap=vyi + dt1*leapCte*yi;
 
 	//Metodo de Euler
 	ofstream outfile;
@@ -81,16 +81,17 @@ int main () {
 
 	for(int i=0; i<numeroVueltas1;i++){
 
-		float *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt1);
+		double *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt1);
 
 		distXEuler=*euler;
 		distYEuler=*(euler+1);
 		velocXEuler=*(euler+2);
 		velocYEuler=*(euler+3);
 		
-		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
-		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<" " << dt1*i << endl;
+		double momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
+		double energiaK = MasaTierra*(velocXEuler*velocXEuler+velocYEuler*velocYEuler)/2;
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energiaU <<" " << energiaK <<" "<< dt1*i << endl;
 	}
 
 	outfile.close();
@@ -101,15 +102,16 @@ int main () {
 	outfile.open("metodoRungeKutta1.dat");
 
 	for(int i=0; i<numeroVueltas1;i++){
-		float *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt1);
+		double *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt1);
 		distXRK=*rk;
 		distYRK=*(rk+1);
 		velocXRK=*(rk+2);
 		velocYRK=*(rk+3);
 
-		float momento = distXRK*velocYRK - distYRK*velocXRK;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
-		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<" " << dt1*i << endl;
+		double momento = distXRK*velocYRK - distYRK*velocXRK;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
+		double energiaK = MasaTierra*(velocXRK*velocXRK+velocYRK*velocYRK)/2;
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energiaU <<" " << energiaK  <<" " << dt1*i << endl;
 	}
 
 	outfile.close();
@@ -119,7 +121,7 @@ int main () {
 
 	for(int i=0; i<numeroVueltas1;i++){
 
-		float *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt1);
+		double *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt1);
 
 		distXLeapB=distXLeap;
 		distYLeapB=distYLeap;
@@ -131,9 +133,10 @@ int main () {
 		velocXLeap=*(lp+2);
 		velocYLeap=*(lp+3);
 
-		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
-		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<" " << dt1*i << endl;
+		double momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
+		double energiaK = MasaTierra*(velocXLeap*velocXLeap+velocYLeap*velocYLeap)/2;
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energiaU <<" " << energiaK <<" " << dt1*i << endl;
 
 	}
 
@@ -173,16 +176,17 @@ int main () {
 
 	for(int i=0; i<numeroVueltas2;i++){
 
-		float *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt2);
+		double *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt2);
 
 		distXEuler=*euler;
 		distYEuler=*(euler+1);
 		velocXEuler=*(euler+2);
 		velocYEuler=*(euler+3);
 
-		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
-		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<" " << dt2*i << endl;
+		double momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
+		double energiaK = MasaTierra*(velocXEuler*velocXEuler+velocYEuler*velocYEuler)/2;
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energiaU<<" " << energiaK <<" " << dt2*i << endl;
 	}
 
 	outfile.close();
@@ -193,15 +197,16 @@ int main () {
 	outfile.open("metodoRungeKutta2.dat");
 
 	for(int i=0; i<numeroVueltas2;i++){
-		float *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt2);
+		double *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt2);
 		distXRK=*rk;
 		distYRK=*(rk+1);
 		velocXRK=*(rk+2);
 		velocYRK=*(rk+3);
 
-		float momento = distXRK*velocYRK - distYRK*velocXRK;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
-		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<" " << dt2*i << endl;
+		double momento = distXRK*velocYRK - distYRK*velocXRK;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
+		double energiaK = MasaTierra*(velocXRK*velocXRK+velocYRK*velocYRK)/2;
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energiaU <<" " << energiaK <<" " << dt2*i << endl;
 	}
 
 	outfile.close();
@@ -211,7 +216,7 @@ int main () {
 
 	for(int i=0; i<numeroVueltas2;i++){
 
-		float *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt2);
+		double *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt2);
 
 		distXLeapB=distXLeap;
 		distYLeapB=distYLeap;
@@ -223,9 +228,10 @@ int main () {
 		velocXLeap=*(lp+2);
 		velocYLeap=*(lp+3);
 
-		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
-		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<" " << dt2*i << endl;
+		double momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
+		double energiaK = MasaTierra*(velocXLeap*velocXLeap+velocYLeap*velocYLeap)/2;
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energiaU<<" " << energiaK  <<" " << dt2*i << endl;
 
 	}
 
@@ -264,16 +270,17 @@ int main () {
 
 	for(int i=0; i<numeroVueltas3;i++){
 
-		float *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt3);
+		double *euler = metodoEuler(velocXEuler, velocYEuler, distXEuler, distYEuler, dt3);
 
 		distXEuler=*euler;
 		distYEuler=*(euler+1);
 		velocXEuler=*(euler+2);
 		velocYEuler=*(euler+3);
 
-		float momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
-		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energia <<" " << dt3*i << endl;
+		double momento = distXEuler*velocYEuler - distYEuler*velocXEuler;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXEuler*distXEuler + distYEuler*distYEuler);
+		double energiaK = MasaTierra*(velocXEuler*velocXEuler+velocYEuler*velocYEuler)/2;
+		outfile << distXEuler << " " << distYEuler<<" " << velocXEuler << " " << velocYEuler<<" " << momento*MasaTierra<<" " << energiaU<<" " << energiaK  <<" " << dt3*i << endl;
 	}
 
 	outfile.close();
@@ -283,15 +290,16 @@ int main () {
 	outfile.open("metodoRungeKutta3.dat");
 
 	for(int i=0; i<numeroVueltas3;i++){
-		float *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt3);
+		double *rk = metodoRungeKutta4(velocXRK, velocYRK, distXRK, distYRK, dt3);
 		distXRK=*rk;
 		distYRK=*(rk+1);
 		velocXRK=*(rk+2);
 		velocYRK=*(rk+3);
 
-		float momento = distXRK*velocYRK - distYRK*velocXRK;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
-		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energia <<" " << dt3*i << endl;
+		double momento = distXRK*velocYRK - distYRK*velocXRK;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXRK*distXRK + distYRK*distYRK);
+		double energiaK = MasaTierra*(velocXRK*velocXRK+velocYRK*velocYRK)/2;
+		outfile << distXRK<< " " << distYRK<<" " << velocXRK<< " " << velocYRK<< " " << momento*MasaTierra << " " << energiaU <<" " << energiaK <<" " << dt3*i << endl;
 	}
 
 	outfile.close();
@@ -301,7 +309,7 @@ int main () {
 
 	for(int i=0; i<numeroVueltas3;i++){
 
-		float *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt3);
+		double *lp = metodoLeapFrog(velocXLeapB,velocYLeapB,distXLeapB,distYLeapB,velocXLeap,velocYLeap,distXLeap,distYLeap, dt3);
 
 		distXLeapB=distXLeap;
 		distYLeapB=distYLeap;
@@ -313,9 +321,10 @@ int main () {
 		velocXLeap=*(lp+2);
 		velocYLeap=*(lp+3);
 
-		float momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
-		float energia = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
-		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energia <<" " << dt3*i << endl;
+		double momento = distXLeap*velocYLeap - distYLeap*velocXLeap;
+		double energiaU = -ConstanteGravit*MasaSol*MasaTierra/sqrt(distXLeap*distXLeap + distYLeap*distYLeap);
+		double energiaK = MasaTierra*(velocXLeap*velocXLeap+velocYLeap*velocYLeap)/2;
+		outfile << distXLeap<< " " << distYLeap<< " "<< velocXLeap << " " << velocYLeap <<" "<< momento*MasaTierra << " " << energiaU <<" " << energiaK <<" " << dt3*i << endl;
 
 	}
 
@@ -331,18 +340,18 @@ int main () {
 
 //implementamos los 3 metodos
 
-float *metodoEuler(float velX, float velY, float posX, float posY, float h ){
+double *metodoEuler(double velX, double velY, double posX, double posY, double h ){
 
-	float cte = -MasaSol*ConstanteGravit/pow(sqrt(posX*posX + posY*posY),3);
+	double cte = -MasaSol*ConstanteGravit/pow(sqrt(posX*posX + posY*posY),3);
 	
-	static float avance[4];
-	float *p = avance;
+	static double avance[4];
+	double *p = avance;
 
-	float dX =  h*velX;
-	float dY =  h*velY;
+	double dX =  h*velX;
+	double dY =  h*velY;
 
-	float dVX = cte*h*posX;
-	float dVY = cte*h*posY;
+	double dVX = cte*h*posX;
+	double dVY = cte*h*posY;
 
 	avance[0]= posX + dX;
 	avance[1]= posY + dY;
@@ -353,59 +362,59 @@ float *metodoEuler(float velX, float velY, float posX, float posY, float h ){
 
 }
 
-float *metodoRungeKutta4(float velX, float velY, float posX, float posY, float h ){
+double *metodoRungeKutta4(double velX, double velY, double posX, double posY, double h ){
 
-	float cte1 = -MasaSol*ConstanteGravit/pow(sqrt(posX*posX + posY*posY),3);
+	double cte1 = -MasaSol*ConstanteGravit/pow(sqrt(posX*posX + posY*posY),3);
 	
-	static float avance[4];
-	float *p = avance;
+	static double avance[4];
+	double *p = avance;
 
-	float k1X = velX;
-	float k1Y = velY;
-	float k1VX = cte1*posX;
-	float k1VY = cte1*posY;
+	double k1X = velX;
+	double k1Y = velY;
+	double k1VX = cte1*posX;
+	double k1VY = cte1*posY;
 
-	float nuevX1 = posX + h*k1X/2;
-	float nuevY1 = posY + h*k1Y/2;
-	float nuevVX1 = velX + h*k1VX/2;
-	float nuevVY1 = velY + h*k1VY/2;
+	double nuevX1 = posX + h*k1X/2;
+	double nuevY1 = posY + h*k1Y/2;
+	double nuevVX1 = velX + h*k1VX/2;
+	double nuevVY1 = velY + h*k1VY/2;
 
-	float cte2 = -MasaSol*ConstanteGravit/pow(sqrt(nuevX1*nuevX1 + nuevY1*nuevY1),3);
+	double cte2 = -MasaSol*ConstanteGravit/pow(sqrt(nuevX1*nuevX1 + nuevY1*nuevY1),3);
 
-	float k2X = nuevVX1;
-	float k2Y = nuevVY1;
-	float k2VX = cte2*nuevX1;
-	float k2VY = cte2*nuevY1;
+	double k2X = nuevVX1;
+	double k2Y = nuevVY1;
+	double k2VX = cte2*nuevX1;
+	double k2VY = cte2*nuevY1;
 
-	float nuevX2 = posX + h*k2X/2;
-	float nuevY2 = posY + h*k2Y/2;
-	float nuevVX2 = velX + h*k2VX/2;
-	float nuevVY2 = velY + h*k2VY/2;
+	double nuevX2 = posX + h*k2X/2;
+	double nuevY2 = posY + h*k2Y/2;
+	double nuevVX2 = velX + h*k2VX/2;
+	double nuevVY2 = velY + h*k2VY/2;
 
-	float cte3 = -MasaSol*ConstanteGravit/pow(sqrt(nuevX2*nuevX2 + nuevY2*nuevY2),3);
+	double cte3 = -MasaSol*ConstanteGravit/pow(sqrt(nuevX2*nuevX2 + nuevY2*nuevY2),3);
 
-	float k3X = nuevVX2;
-	float k3Y = nuevVY2;
-	float k3VX = cte3*nuevX2;
-	float k3VY = cte3*nuevY2;
+	double k3X = nuevVX2;
+	double k3Y = nuevVY2;
+	double k3VX = cte3*nuevX2;
+	double k3VY = cte3*nuevY2;
 
-	float nuevX3 = posX + h*k3X;
-	float nuevY3 = posY + h*k3Y;
-	float nuevVX3 = velX + h*k3VX;
-	float nuevVY3 = velY + h*k3VY;
+	double nuevX3 = posX + h*k3X;
+	double nuevY3 = posY + h*k3Y;
+	double nuevVX3 = velX + h*k3VX;
+	double nuevVY3 = velY + h*k3VY;
 
-	float cte4 = -MasaSol*ConstanteGravit/pow(sqrt(nuevX3*nuevX3 + nuevY3*nuevY3),3);
+	double cte4 = -MasaSol*ConstanteGravit/pow(sqrt(nuevX3*nuevX3 + nuevY3*nuevY3),3);
 
-	float k4X = nuevVX3;
-	float k4Y = nuevVY3;
-	float k4VX = cte4*nuevX3;
-	float k4VY = cte4*nuevY3;
+	double k4X = nuevVX3;
+	double k4Y = nuevVY3;
+	double k4VX = cte4*nuevX3;
+	double k4VY = cte4*nuevY3;
 	
-	float dX =  h*(k1X+2*k2X+ 2*k3X +k4X)/6;
-	float dY =  h*(k1Y+2*k2Y+ 2*k3Y+ k4Y)/6;
+	double dX =  h*(k1X+2*k2X+ 2*k3X +k4X)/6;
+	double dY =  h*(k1Y+2*k2Y+ 2*k3Y+ k4Y)/6;
 
-	float dVX =  h*(k1VX+2*k2VX+ 2*k3VX+ k4VX)/6;
-	float dVY =  h*(k1VY+2*k2VY+ 2*k3VY+ k4VY)/6;
+	double dVX =  h*(k1VX+2*k2VX+ 2*k3VX+ k4VX)/6;
+	double dVY =  h*(k1VY+2*k2VY+ 2*k3VY+ k4VY)/6;
 
 	avance[0]= posX + dX;
 	avance[1]= posY + dY;
@@ -416,17 +425,17 @@ float *metodoRungeKutta4(float velX, float velY, float posX, float posY, float h
 
 }
 
-float *metodoLeapFrog(float velXB, float velYB, float posXB, float posYB, float velX, float velY, float posX, float posY, float h ){
-	float cte = -MasaSol*ConstanteGravit/pow(sqrt(posX*posX + posY*posY),3);
+double *metodoLeapFrog(double velXB, double velYB, double posXB, double posYB, double velX, double velY, double posX, double posY, double h ){
+	double cte = -MasaSol*ConstanteGravit/pow(sqrt(posX*posX + posY*posY),3);
 	
-	static float avance[4];
-	float *p = avance;
+	static double avance[4];
+	double *p = avance;
 
-	float dX =  2*h*velX;
-	float dY =  2*h*velY;
+	double dX =  2*h*velX;
+	double dY =  2*h*velY;
 
-	float dVX =  2*cte*h*posX;
-	float dVY =  2*cte*h*posY;
+	double dVX =  2*cte*h*posX;
+	double dVY =  2*cte*h*posY;
 
 	avance[0]= posXB + dX;
 	avance[1]= posYB + dY;
