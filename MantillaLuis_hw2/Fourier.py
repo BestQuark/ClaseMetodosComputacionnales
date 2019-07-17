@@ -37,10 +37,15 @@ plt.savefig("TransformadaAmbasCaras.png")
 
 #Filtramos ambas imagenes y graficamos la mezcla de ambas
 
-pasaAltas = transCara1*sig(-(np.abs(transCara1.real) - 24))
-pasaBajas = transCara2*sig(np.abs(transCara2.real)-16)
-filtro = pasaAltas+pasaBajas
-# np.where(np.abs(transCara1.real)<25, transCara1, 0)
+#Multiplico por 1.7 las frecuencias altas pues se ven muy tenues estos razgos al juntar ambas imagenes
+pasaAltas = 1.7*transCara1*sig(-(np.abs(transCara1) - 24))
+pasaBajas = transCara2*sig(np.abs(transCara2)-16)
+filtro = pasaAltas +pasaBajas
+
+#Podriamos usar el siguiente codigo como filtro pero viene mejor suavizarlo y tomar el corte en distintos puntos las frecuencias especificadas en http://cvcl.mit.edu/publications/OlivaTorralb_Hybrid_Siggraph06.pdf
+#np.where(np.abs(transCara1)<24, transCara1, transCara2)
+
+
 
 plt.figure()
 plt.title("Cara Hibrida")
@@ -50,11 +55,31 @@ plt.savefig("TransformadaHibrida.png")
 
 #Hallamos la transformada inversa de la transformada hibrida y la graficamos
 
+
+#grafica del pasaAltas
+caraPasaAltas = np.fft.ifft2(pasaAltas)
+plt.figure()
+plt.axis('off')
+plt.imshow(-caraPasaAltas.real, cmap = 'Greys')
+plt.savefig("CaraPasaAltas.png")
+
+#grafica del pasaAltas
+caraPasaBajas = np.fft.ifft2(pasaBajas)
+plt.figure()
+plt.axis('off')
+plt.imshow(-caraPasaBajas.real, cmap = 'Greys')
+plt.savefig("CaraPasaBajas.png")
+
+
+#grafica de Ambas imagenes sumadas
 caraHibrida = np.fft.ifft2(filtro)
 plt.figure()
+plt.axis('off')
 plt.imshow(-caraHibrida.real, cmap = 'Greys')
 plt.savefig("CaraHibrida.png")
 
+#explicacion del warning por usar la exponencial
+print("Este warning sale ya que uso una exponencial para el filtro y se estan calculando valores de la exponencial muy altos, pero para nuestros fines, la funcion sigmond del filtro toma valores de 0 exactamente cuando llega al overflow")
 
 
 
