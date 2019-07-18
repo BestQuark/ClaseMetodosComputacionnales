@@ -29,7 +29,7 @@ plt.title("Cara Seria")
 plt.imshow(transCara1Shift.real, vmax = 100, vmin = -100)
 
 plt.subplot(1,2,2)
-plt.title("Cara Riendo")
+plt.title("Cara Sonriendo")
 plt.imshow(transCara2Shift.real, vmax = 100, vmin = -100)
 
 plt.savefig("TransformadaAmbasCaras.png")
