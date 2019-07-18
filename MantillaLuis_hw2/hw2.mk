@@ -1,7 +1,5 @@
-Resultados_hw2.pdf: Resultados_hw2.tex
+Resultados_hw2.pdf: Resultados_hw2.tex TransformadaAmbasCaras.png TransformadaHibrida.png CaraHibrida.png CaraPasaAltas.png CaraPasaBajas.png posiciones.png angularMomentum.png EnergiaCinetica.png EnergiaPotencial.png EnergiaTotal.png 
 	pdflatex Resultados_hw2.tex
-
-Resultados_hw2.tex: TransformadaAmbasCaras.png TransformadaHibrida.png CaraHibrida.png CaraPasaAltas.png CaraPasaBajas.png posiciones.png angularMomentum.png EnergiaCinetica.png EnergiaPotencial.png EnergiaTotal.png 
 
 TransformadaAmbasCaras.png: Fourier.py
 	python3 Fourier.py
