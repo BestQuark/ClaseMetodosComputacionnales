@@ -117,10 +117,10 @@ Solucionamos las siguientes ecuaciones con distintas elecciones de dt para aprox
 
 Esto con el fin de dar aproximadamente $10000$ pasos por orbita con el primer $dt$, $1000$ pasos con el segundo $dt$ y $500$ pasos con el tercer $dt$.
 
-\textbf{NOTA SOBRE UNIDADES: }Dado que se trabaja con unidades de Unidades Astron\'omicas [AU], Masas Solares [MS] y a\~nos [YR], los valores de energ\'ias cin\'eticas, potenciales, totales y los momentos angulares se  multiplican  por un factor de $100000$ para cuantificar con mayor facilidad las fluctuaciones en las gr\'aficas.
 
 Las siguientes gr\'aficas est\'an organizadas de la siguiente manera: La primera fila utiliza el m\'etodo de Euler, la segunda fila el m\'etodo de RungeKutta de cuarto orden y la tercera fila el m\'etodo de LeapFrog. La primera columna utiliza el $dt1$ para calcular la evoluci\'on temporal del sistema, la segunda columna el $dt2$ y la tercera columna el $dt3$.
 
+\textbf{NOTA SOBRE UNIDADES: }Dado que se trabaja con unidades de Unidades Astron\'omicas [AU], Masas Solares [MS] y a\~nos [YR], los valores de energ\'ias cin\'eticas, potenciales, totales y los momentos angulares se  multiplican  por un factor de $100000$ para cuantificar con mayor facilidad las fluctuaciones en las gr\'aficas.
 \subsection*{Posiciones Orbitales}
 
 \begin{figure}[!htbp]
@@ -139,7 +139,11 @@ Se puede apreciar que el m\'etodo de Euler es el que peor simula esta situaci\'o
   \caption{Momento Angular}
 \end{figure}
 
-El momento angular es una cantidad f\'isica conservada y vemos que los m\'etodos de RungeKutta y LeapFrog mantienen muy bien esta cantidad. El m\'etodo de Euler causa un aumento significativo del Momento Angular, en el tercer $dt$ se llega casi a duplicar el momento inicial despu\'es de $20$ a\~nos de evoluci\'on temporal. 
+El momento angular es una cantidad f\'isica conservada
+\begin{equation*}
+    \Vec{L} = \Vec{r} \times \Vec{p}
+\end{equation*}
+Vemos que los m\'etodos de RungeKutta y LeapFrog mantienen muy bien esta cantidad. El m\'etodo de Euler causa un aumento significativo del Momento Angular, en el tercer $dt$ se llega casi a duplicar el momento inicial despu\'es de $20$ a\~nos de evoluci\'on temporal. En las gr\'aficas, dado que las componentes z de nuestra posici\'on y momento lineal son nulas, la direcci\'on del momento angular ser\'a \'unicamente en direcci\'on z, por ende solo se grafica su magnitud (escalada por $100000$). 
 
 \subsection*{Energ\'ia Potencial}
 
@@ -194,4 +198,5 @@ Vemos que la energ\'ia total pr\'acticamente se conserva cuando implementamos el
 
 
 \end{document}
+
 
