@@ -37,10 +37,13 @@ plt.savefig("TransformadaAmbasCaras.png")
 
 #Filtramos ambas imagenes y graficamos la mezcla de ambas
 
-#cambiamos un poco los pesos para que la suma de ambas se vea mejor
-pasaAltas = 1.7*transCara1*sig(-(np.abs(transCara1) - 24))
-pasaBajas = 0.9*transCara2*sig(np.abs(transCara2)-16)
+#usamos las frecuencias de corte que permitan ver mejor nuestra imagen (en el pdf toman como corte de pasabajas 16, pero con 16 nuestra imagen sigue estando muy detallada, con 27 sale como nos gustaria que estuviera))
+pasaAltas = transCara1*sig(-(np.abs(transCara1) - 24))
+pasaBajas = transCara2*sig(np.abs(transCara2)-27)
+
+#aqui defini el filtro total como la suma pero no nos permite alinear la imagen, es mejor despues de transformar cada filtro por separado y ahi manejar el tamanio de los arreglos y jugar con sus pesos, esto lo usamos para graficar la transformada de ambas imagenes sumadas
 filtro = pasaAltas +pasaBajas
+
 
 #Podriamos usar el siguiente codigo como filtro pero viene mejor suavizarlo y tomar el corte en distintos puntos las frecuencias especificadas en http://cvcl.mit.edu/publications/OlivaTorralb_Hybrid_Siggraph06.pdf
 #np.where(np.abs(transCara1)<24, transCara1, transCara2)
@@ -71,12 +74,18 @@ plt.imshow(-caraPasaBajas.real, cmap = 'Greys')
 plt.savefig("CaraPasaBajas.png")
 
 
-#grafica de Ambas imagenes sumadas
-caraHibrida = np.fft.ifft2(filtro)
+#graficamos ambas caras y corregimos la posicion para que los ojos de ambas imagenes cuadren (jugamos con los pesos para tener un mejor resultado)
+caraHibrida =0.8*caraPasaBajas[-250:,:165]+5*caraPasaAltas[:250,-165:]
 plt.figure()
 plt.axis('off')
 plt.imshow(-caraHibrida.real, cmap = 'Greys')
+
+#uso esto para poner un poco mas clara la imagen
+plt.clim(-1.6,1.5)
 plt.savefig("CaraHibrida.png")
+
+
+
 
 #explicacion del warning por usar la exponencial
 print("Este warning sale ya que uso una exponencial para el filtro y se estan calculando valores de la exponencial muy altos, pero para nuestros fines, la funcion sigmond del filtro toma valores de exactamente 0 cuando llega al overflow")

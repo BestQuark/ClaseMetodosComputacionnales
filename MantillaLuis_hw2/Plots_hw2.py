@@ -107,6 +107,8 @@ tLF3 = leapF3[:,7]
 
 
 #Hacemos un subplot para graficar las posiciones obtenidas para los 3 distintos valores de dt y los 3 metodos distintos
+
+#Aqui graficamos x en el eje horizontal y y en el eje vertical para los 9 casos TODOS LOS VALORES ESTAN EN UNIDADES ASTRONOMICAS (X Y Y) (no lo pongo en la grafica para no sobrecargar los subplots)
 figR, axR = plt.subplots(3,3)
 
 axR[0,0].plot(xE1,yE1,c='r')
@@ -131,6 +133,7 @@ plt.savefig("posiciones.png")
 figL, axL = plt.subplots(3,3)
 
 #Hacemos un subplot para graficar los momentos angulares obtenidos para los 3 distintos valores de dt y los 3 metodos distintos
+#Grafico los momentos angulares (eje vertical) y multiplicados por 100000 para no tener valores tan chicos pues las unidades que estamos trabajando son de AU*MASASOLAR*AU/YR
 axL[0,0].plot(tE1,lE1,c='r')
 axL[0,0].set_ylabel("Euler")
 axL[0,0].set_title("dt1")
@@ -154,6 +157,7 @@ figU, axU = plt.subplots(3,3)
 
 
 #Hacemos un subplot para graficar las energias potenciales obtenidas para los 3 distintos valores de dt y los 3 metodos distintos
+#Graficamos la energia potencial (eje vertical) multiplicadas por 100000 por el mismo motivo anterior (UNIDADES = MASASOLAR*AU*AU/YR**2)
 axU[0,0].plot(tE1,uE1,c='r')
 axU[0,0].set_ylabel("Euler")
 axU[0,0].set_title("dt1")
@@ -174,7 +178,7 @@ plt.tight_layout()
 plt.savefig("EnergiaPotencial.png")
 
 #Hacemos un subplot para graficar las energias cineticas obtenidas para los 3 distintos valores de dt y los 3 metodos distintos
-
+#Graficamos la energia cinetica (eje vertical) multiplicadas por 100000 por el mismo motivo anterior (UNIDADES = MASASOLAR*AU*AU/YR**2)
 figK, axK = plt.subplots(3,3)
 
 
@@ -198,6 +202,7 @@ plt.tight_layout()
 plt.savefig("EnergiaCinetica.png")
 
 #Hacemos un subplot para graficar las energias totales obtenidas para los 3 distintos valores de dt y los 3 metodos distintos
+#Graficamos la energia total (eje vertical) multiplicadas por 100000 por el mismo motivo anterior (UNIDADES = MASASOLAR*AU*AU/YR**2)
 figE, axE = plt.subplots(3,3)
 
 
