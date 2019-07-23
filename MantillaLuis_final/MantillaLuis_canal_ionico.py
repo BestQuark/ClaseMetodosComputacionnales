@@ -27,7 +27,7 @@ for i in range(1000):
 	datx = np.append(datx,[centrox])
 	daty = np.append(daty,[centroy])
 	datr = np.append(datr,[radio])
-
+print("El centro que se hallo fue ("+str(centrox)+","+str(centroy)+"), con un radio de "+str(radio))
 fig, ax = plt.subplots()
 plt.axis('equal')
 #le restamos eso para que no toque el borde
