@@ -11,20 +11,15 @@ datx = np.array([])
 daty = np.array([])
 datr = np.array([])
 
-#def siono(x,y,r):
-#	a = True
-#	for i in len(posx):
-#		if( ((x-posx[i])**2 + (y-posy[i])**2) )
-
-centrox = 5
-centroy = 5
-radio = np.sqrt((np.min(np.abs(posx-centrox)))**2 +(np.min(np.abs(posy-centroy)))**2)
+centrox = 0
+centroy = 0
+radio =np.min(np.sqrt((posx-centrox)**2 +(posy-centroy)**2))
 
 for i in range(1000):
-	centroxN = np.random.normal(centrox,0.05)
-	centroyN = np.random.normal(centrox,0.05)
-	radioN = np.sqrt(np.min(posx-centroxN)**2 +np.min(posy-centroyN)**2)
-	if(radioN > radio and (np.all(np.sqrt((centroxN-posx)**2 + (centroyN-posy)**2)) < radioN)):
+	centroxN = np.random.normal(centrox,1)
+	centroyN = np.random.normal(centrox,1)
+	radioN = np.min(np.sqrt((posx-centroxN)**2 +(posy-centroyN)**2))
+	if(radioN > radio): 
 		centrox = centroxN
 		centroy = centroyN
 		radio = radioN
@@ -33,12 +28,13 @@ for i in range(1000):
 	daty = np.append(daty,[centroy])
 	datr = np.append(datr,[radio])
 
-
 fig, ax = plt.subplots()
 plt.axis('equal')
-circle1 = plt.Circle((centrox, centroy), radio, color='r',fill=False)
+#le restamos eso para que no toque el borde
+circle1 = plt.Circle((centrox, centroy), radio-0.0000001, color='r',fill=False)
 ax.add_artist(circle1)
 puntos = plt.scatter(posx,posy,s=2,c='b')
 ax.add_artist(puntos)
+ax.set_title("punto 1")
 plt.savefig("Canal.png")
 plt.close()
